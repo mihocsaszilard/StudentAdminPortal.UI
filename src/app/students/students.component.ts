@@ -19,6 +19,7 @@ export class StudentsComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
   @ViewChild(MatSort) matSort!: MatSort;
+  filterString = '';
 
   constructor(private studentService: StudentsService) { }
 
@@ -36,6 +37,10 @@ export class StudentsComponent implements OnInit, OnDestroy {
           this.dataSource.sort = this.matSort;
         }
       });
+  }
+
+  filterStudents() {
+    this.dataSource.filter = this.filterString.trim().toLowerCase();
   }
 
   ngOnDestroy(): void {

@@ -3,6 +3,14 @@
 </div>
 
 <div class="container">
+
+  <div class="row end-xs">
+    <div class="col-xs-12">
+      <input type="text" class="search-input mat-elevation-z3z " placeholder="Search ..." [(ngModel)]="filterString"
+        (keyup)="filterStudents()">
+    </div>
+  </div>
+
   <div class="mat-elevation-z5">
     <mat-table matSort [dataSource]="dataSource">
       <!-- firstName Definition -->
@@ -19,7 +27,7 @@
 
       <!-- dateOfBirth Definition -->
       <ng-container matColumnDef="dateOfBirth">
-        <mat-header-cell *matHeaderCellDef> Date of Birth </mat-header-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef> Date of Birth </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.dateOfBirth | date: 'dd/MM/yyyy'}} </mat-cell>
       </ng-container>
 
