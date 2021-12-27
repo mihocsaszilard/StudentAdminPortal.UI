@@ -1,21 +1,19 @@
-<div class="header">
-  <div class="contaier">
-    <h1>Students</h1>
-  </div>
+<div class="header container">
+  <h1>Students List</h1>
 </div>
 
 <div class="container">
-  <div>
-    <mat-table [dataSource]="dataSource">
+  <div class="mat-elevation-z5">
+    <mat-table matSort [dataSource]="dataSource">
       <!-- firstName Definition -->
       <ng-container matColumnDef="firstName">
-        <mat-header-cell *matHeaderCellDef> First Name </mat-header-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef> First Name </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.firstName}} </mat-cell>
       </ng-container>
 
       <!-- lastName Definition -->
       <ng-container matColumnDef="lastName">
-        <mat-header-cell *matHeaderCellDef> Last Name </mat-header-cell>
+        <mat-header-cell mat-sort-header *matHeaderCellDef> Last Name </mat-header-cell>
         <mat-cell *matCellDef="let row"> {{row.lastName}} </mat-cell>
       </ng-container>
 
@@ -50,6 +48,10 @@
       <mat-row *matRowDef="let row; columns: ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender']">
       </mat-row>
     </mat-table>
+
+    <mat-paginator [length]="students.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page">
+    </mat-paginator>
 
   </div>
 </div>
