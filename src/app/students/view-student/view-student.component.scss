@@ -1,0 +1,15 @@
+.header {
+  margin-top: 10px;
+}
+
+.headline {
+  display: flex;
+  mat-icon {
+    font-size: 32px;
+    margin-right: 15px;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}

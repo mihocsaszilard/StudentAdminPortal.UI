@@ -50,10 +50,21 @@
         <mat-cell *matCellDef="let row"> {{row.gender.description}} </mat-cell>
       </ng-container>
 
+      <!-- edit Definition -->
+      <ng-container matColumnDef="edit">
+        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <a [routerLink]="['/students', row.id]">
+            <mat-icon color="primary">edit</mat-icon>
+          </a>
+        </mat-cell>
+      </ng-container>
+
       <!-- Header and Row Declarations -->
-      <mat-header-row *matHeaderRowDef="['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender']">
+      <mat-header-row *matHeaderRowDef="['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
       </mat-header-row>
-      <mat-row *matRowDef="let row; columns: ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender']">
+      <mat-row
+        *matRowDef="let row; columns: ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
       </mat-row>
     </mat-table>
 
