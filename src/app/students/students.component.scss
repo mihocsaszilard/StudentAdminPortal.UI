@@ -1,7 +1,13 @@
-.header {
-  margin-top: 10px;
+.headline {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
   h1 {
-    margin-left: 37px;
+    display: flex;
+    margin: auto;
+  }
+  button {
+    opacity: 0;
   }
 }
 
