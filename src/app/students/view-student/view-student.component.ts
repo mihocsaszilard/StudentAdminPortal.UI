@@ -2,8 +2,7 @@ import { Gender } from './../../models/api-model/gender.model';
 import { GenderServiceService } from './../../services/gender-service.service';
 import { StudentsService } from './../students.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { subscribeOn } from 'rxjs';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Student } from 'src/app/models/ui-models/student.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -39,6 +38,7 @@ export class ViewStudentComponent implements OnInit {
   constructor(
     private readonly studentService: StudentsService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly genderService: GenderServiceService,
     private snackbar: MatSnackBar
   ) { }
@@ -71,5 +71,17 @@ export class ViewStudentComponent implements OnInit {
           duration: 3000,
         })
       );
+  }
+
+  onDeleteStudent(): void {
+    this.studentService.deleteStudent(this.student.id)
+      .subscribe(deletedStudent => this.snackbar
+        .open('Student removed successfully', undefined, {
+          duration: 3000,
+        })
+      );
+    this.router.navigateByUrl('/students').then(() => {
+      window.location.reload();
+    });
   }
 }

@@ -1,7 +1,7 @@
 <div class="header container">
   <div class="headline">
-    <button mat-mini-fab class="mat-elevation-z2" color="basic" routerLink="/students">
-      <mat-icon color=>chevron_left</mat-icon>
+    <button mat-button class="mat-elevation-z0" color="basic" routerLink="/students">
+      <mat-icon color=>chevron_left</mat-icon>Back
     </button>
     <h1>View Students</h1>
   </div>
@@ -86,7 +86,8 @@
         </div>
         <div class="row">
           <div class="col-xs-12">
-            <button (click)="onUpdateStudent()" mat-raised-button color="primary">Update</button>
+            <button class="student-btn" (click)="onUpdateStudent()" mat-raised-button color="primary">Update</button>
+            <button class="student-btn" (click)="onDeleteStudent()" mat-raised-button color="warn">Remove</button>
           </div>
         </div>
       </form>
