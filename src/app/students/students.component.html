@@ -1,81 +1,83 @@
 <div class="header container">
-  <div class="headline">
-    <button disabled mat-mini-fab>
-      <mat-icon></mat-icon>
-    </button>
-    <h1>Students List</h1>
-  </div>
+  <h1 class="page-title">Students List</h1>
+  <div class="headline"> </div>
 </div>
 
 <div class="container">
 
   <div class="row end-xs">
-    <div class="col-xs-12">
+    <div class="col-xs-12 table-actions">
+      <a routerLink="/students/new" class="start" color="primary" mat-button>
+        <mat-icon>add</mat-icon>
+        <span class="btn-text-aligned-with-icon">Add Student</span>
+      </a>
       <input type="text" class="search-input mat-elevation-z3z " placeholder="Search ..." [(ngModel)]="filterString"
         (keyup)="filterStudents()">
     </div>
   </div>
 
   <div class="mat-elevation-z5">
-    <mat-table matSort [dataSource]="dataSource">
-      <!-- firstName Definition -->
-      <ng-container matColumnDef="firstName">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> First Name </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.firstName}} </mat-cell>
-      </ng-container>
+    <div class="col-xs-12 ">
+      <mat-table matSort [dataSource]="dataSource">
+        <!-- firstName Definition -->
+        <ng-container matColumnDef="firstName">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> First Name </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.firstName}} </mat-cell>
+        </ng-container>
 
-      <!-- lastName Definition -->
-      <ng-container matColumnDef="lastName">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> Last Name </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.lastName}} </mat-cell>
-      </ng-container>
+        <!-- lastName Definition -->
+        <ng-container matColumnDef="lastName">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> Last Name </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.lastName}} </mat-cell>
+        </ng-container>
 
-      <!-- dateOfBirth Definition -->
-      <ng-container matColumnDef="dateOfBirth">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> Date of Birth </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.dateOfBirth | date: 'dd/MM/yyyy'}} </mat-cell>
-      </ng-container>
+        <!-- dateOfBirth Definition -->
+        <ng-container matColumnDef="dateOfBirth">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> Date of Birth </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.dateOfBirth | date: 'dd/MM/yyyy'}} </mat-cell>
+        </ng-container>
 
-      <!-- email Definition -->
-      <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.email}}
-        </mat-cell>
-      </ng-container>
+        <!-- email Definition -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.email}}
+          </mat-cell>
+        </ng-container>
 
-      <!-- mobile Definition -->
-      <ng-container matColumnDef="mobile">
-        <mat-header-cell *matHeaderCellDef> Mobile </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.mobile}} </mat-cell>
-      </ng-container>
+        <!-- mobile Definition -->
+        <ng-container matColumnDef="mobile">
+          <mat-header-cell *matHeaderCellDef> Mobile </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.mobile}} </mat-cell>
+        </ng-container>
 
-      <!-- gender Definition -->
-      <ng-container matColumnDef="gender">
-        <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.gender.description}} </mat-cell>
-      </ng-container>
+        <!-- gender Definition -->
+        <ng-container matColumnDef="gender">
+          <mat-header-cell *matHeaderCellDef> Gender </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.gender.description}} </mat-cell>
+        </ng-container>
 
-      <!-- edit Definition -->
-      <ng-container matColumnDef="edit">
-        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <a [routerLink]="['/students', row.id]">
-            <mat-icon color="primary">edit</mat-icon>
-          </a>
-        </mat-cell>
-      </ng-container>
+        <!-- edit Definition -->
+        <ng-container matColumnDef="edit">
+          <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <a [routerLink]="['/students', row.id]">
+              <mat-icon color="primary">edit</mat-icon>
+            </a>
+          </mat-cell>
+        </ng-container>
 
-      <!-- Header and Row Declarations -->
-      <mat-header-row *matHeaderRowDef="['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
-      </mat-header-row>
-      <mat-row
-        *matRowDef="let row; columns: ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
-      </mat-row>
-    </mat-table>
+        <!-- Header and Row Declarations -->
+        <mat-header-row
+          *matHeaderRowDef="['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
+        </mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit']">
+        </mat-row>
+      </mat-table>
 
-    <mat-paginator [length]="students.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page">
-    </mat-paginator>
+      <mat-paginator [length]="students.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page">
+      </mat-paginator>
+    </div>
 
   </div>
-</div>

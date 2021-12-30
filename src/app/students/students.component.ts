@@ -14,7 +14,7 @@ import { MatSort } from '@angular/material/sort';
 export class StudentsComponent implements OnInit, OnDestroy {
 
   students: Student[] = [];
-  studentSub: Subscription = new Subscription;
+  studentSub: Subscription | undefined;
   displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit'];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
@@ -44,6 +44,6 @@ export class StudentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.studentSub.unsubscribe();
+    this.studentSub?.unsubscribe();
   }
 }

@@ -1,9 +1,11 @@
 <div class="header container">
+  <h1 class="page-title">{{isNewStudent ? 'Add Student' : 'View Student'}}</h1>
   <div class="headline">
-    <button mat-button class="mat-elevation-z0" color="basic" routerLink="/students">
-      <mat-icon color=>chevron_left</mat-icon>Back
+    <button mat-button class="mat-elevation-z0" color="primary" routerLink="/students">
+      <mat-icon color=>chevron_left</mat-icon>
+      <span class="btn-text-aligned-with-icon">Back</span>
     </button>
-    <h1>View Students</h1>
+
   </div>
 </div>
 
@@ -59,7 +61,7 @@
 
           <div class="col-xs-6 ">
             <mat-form-field appearance="outline">
-              <mat-label>{{student.gender.description}}</mat-label>
+              <mat-label>Gender</mat-label>
               <mat-select [(ngModel)]="student.genderId" name="gender">
                 <mat-option *ngFor="let gender of genderList" [value]="gender.id">
                   {{gender.description}}
@@ -85,9 +87,21 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-xs-12">
-            <button class="student-btn" (click)="onUpdateStudent()" mat-raised-button color="primary">Update</button>
-            <button class="student-btn" (click)="onDeleteStudent()" mat-raised-button color="warn">Remove</button>
+          <div class="col-xs-12" *ngIf="!isNewStudent">
+            <button class="student-btn" (click)="onUpdateStudent()" mat-raised-button color="primary">
+              <mat-icon>assignment</mat-icon>
+              <span class="btn-text-aligned-with-icon">Update</span>
+            </button>
+            <button class="student-btn" (click)="onDeleteStudent()" mat-raised-button color="warn">
+              <mat-icon>delete</mat-icon>
+              <span class="btn-text-aligned-with-icon">Remove</span>
+            </button>
+          </div>
+          <div class="col-xs-12" *ngIf="isNewStudent">
+            <button class="student-btn" (click)="onCreateStudent()" mat-raised-button color="primary">
+              <mat-icon>add</mat-icon>
+              <span class="btn-text-aligned-with-icon">Add</span>
+            </button>
           </div>
         </div>
       </form>
