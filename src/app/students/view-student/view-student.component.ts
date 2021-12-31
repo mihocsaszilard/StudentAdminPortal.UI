@@ -38,6 +38,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   isNewStudent = false;
   studentSub: Subscription | undefined;
   genderSub: Subscription | undefined;
+  imgPath = '';
 
   constructor(
     private readonly studentService: StudentsService,
@@ -56,15 +57,15 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
           // If the route contains 'add' -> new student
           if (this.studentId.toLowerCase() === 'new'.toLowerCase()) {
             this.isNewStudent = true;
-
+            this.setImg();
           } else {
             // otherwise -> existing student
             this.isNewStudent = false;
-
             this.studentSub = this.studentService.getSingleStudent(this.studentId)
               .subscribe(
                 studentData => this.student = studentData
               );
+            this.setImg();
           }
 
           this.genderSub = this.genderService.getGenderList()
@@ -79,11 +80,13 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   onUpdateStudent(): void {
     // Call Student Service to update
     this.studentService.updateStudent(this.student.id, this.student)
-      .subscribe(() => this.snackbar
-        .open('Student updated successfully!', undefined, {
-          duration: 3000,
-        })
-      );
+      .subscribe({
+        next: () => this.snackbar
+          .open('Student updated successfully!', undefined, {
+            duration: 3000,
+          }),
+        error: (e) => console.log(e)
+      });
     setTimeout(() => {
       this.router.navigateByUrl('/students');
     }, 2000);
@@ -91,11 +94,13 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
   onDeleteStudent(): void {
     this.studentService.deleteStudent(this.student.id)
-      .subscribe(() => this.snackbar
-        .open('Student removed successfully!', undefined, {
-          duration: 2000,
-        })
-      );
+      .subscribe({
+        next: () => this.snackbar
+          .open('Student removed successfully!', undefined, {
+            duration: 2000,
+          }),
+        error: (e) => console.log(e)
+      });
     setTimeout(() => {
       this.router.navigateByUrl('/students');
     }, 2000);
@@ -103,17 +108,46 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
 
   onCreateStudent(): void {
     this.studentService.createStudent(this.student)
-      .subscribe((createdStudent) => this.navigateToStudent(createdStudent)
-      )
+      .subscribe({
+        next: createdStudent => {
+          this.snackbar.open('Student added successfully!', undefined, {
+            duration: 2000,
+          });
+          setTimeout(() => {
+            this.router.navigateByUrl(`/students/${createdStudent.id}`);
+          }, 2000);
+        },
+        error: e => console.log(e)
+      });
   }
 
-  navigateToStudent(createdStudent: Student) {
-    this.snackbar.open('Student added successfully!', undefined, {
-      duration: 2000,
-    });
-    setTimeout(() => {
-      this.router.navigateByUrl(`/students/${createdStudent.id}`);
-    }, 2000);
+  uploadImg(event: any): void {
+    if (this.studentId) {
+      const file: File = event.target.files[0];
+      this.studentService.uploadStudentImg(this.student.id, file)
+        .subscribe({
+          next: uploadedImgUrl => {
+            // slice -> because the path contains the full project directory
+            this.student.profileImgUrl = uploadedImgUrl.slice(119, this.student.profileImgUrl.length);
+            console.log(uploadedImgUrl.slice(119, this.student.profileImgUrl.length));
+            this.setImg();
+            this.snackbar.open('Profile Image has been updated!', undefined, {
+              duration: 2000
+            })
+          },
+          error: e => console.log(e)
+        });
+    }
+  }
+
+  private setImg() {
+    if (this.student.profileImgUrl) {
+      // load image by url
+      this.imgPath = this.studentService.getImgPath(this.student.profileImgUrl);
+    } else {
+      // display default img
+      this.imgPath = "assets/images/defaultAvatar.png";
+    }
   }
 
   ngOnDestroy(): void {
