@@ -1,13 +1,17 @@
+
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
+import { NgForm } from '@angular/forms';
+
+
+import { Student } from './../../models/ui-models/student.model';
 import { Gender } from './../../models/api-model/gender.model';
 import { GenderServiceService } from './../../services/gender-service.service';
 import { StudentsService } from './../students.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Student } from 'src/app/models/ui-models/student.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
-
 @Component({
+
   selector: 'app-view-student',
   templateUrl: './view-student.component.html',
   styleUrls: ['./view-student.component.scss']
@@ -39,6 +43,9 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   studentSub: Subscription | undefined;
   genderSub: Subscription | undefined;
   imgPath = '';
+  errorMsg = '';
+
+  @ViewChild('studentDetailsForm') studentDetailsForm?: NgForm;
 
   constructor(
     private readonly studentService: StudentsService,
@@ -78,18 +85,23 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   }
 
   onUpdateStudent(): void {
-    // Call Student Service to update
-    this.studentService.updateStudent(this.student.id, this.student)
-      .subscribe({
-        next: () => this.snackbar
-          .open('Student updated successfully!', undefined, {
-            duration: 3000,
-          }),
-        error: (e) => console.log(e)
-      });
-    setTimeout(() => {
-      this.router.navigateByUrl('/students');
-    }, 2000);
+    if (this.studentDetailsForm?.form.valid) {
+      // Call Student Service to update
+      this.studentService.updateStudent(this.student.id, this.student)
+        .subscribe({
+          next: () => this.snackbar
+            .open('Student updated successfully!', undefined, {
+              duration: 3000,
+            }),
+          error: (e) => {
+            console.log(e),
+              this.errorMsg = e.error.errors.Mobile[0];
+          }
+        });
+      setTimeout(() => {
+        this.router.navigateByUrl(`/students/${this.student.id}`);
+      }, 2000);
+    }
   }
 
   onDeleteStudent(): void {
@@ -107,18 +119,23 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
   }
 
   onCreateStudent(): void {
-    this.studentService.createStudent(this.student)
-      .subscribe({
-        next: createdStudent => {
-          this.snackbar.open('Student added successfully!', undefined, {
-            duration: 2000,
-          });
-          setTimeout(() => {
-            this.router.navigateByUrl(`/students/${createdStudent.id}`);
-          }, 2000);
-        },
-        error: e => console.log(e)
-      });
+
+    if (this.studentDetailsForm?.form.valid) {
+      // Submit form
+
+      this.studentService.createStudent(this.student)
+        .subscribe({
+          next: createdStudent => {
+            this.snackbar.open('Student added successfully!', undefined, {
+              duration: 2000,
+            });
+            setTimeout(() => {
+              this.router.navigateByUrl(`/students/${createdStudent.id}`);
+            }, 2000);
+          },
+          error: e => console.log(e)
+        });
+    }
   }
 
   uploadImg(event: any): void {
@@ -128,8 +145,9 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
         .subscribe({
           next: uploadedImgUrl => {
             // slice -> because the path contains the full project directory
-            this.student.profileImgUrl = uploadedImgUrl.slice(119, this.student.profileImgUrl.length);
-            console.log(uploadedImgUrl.slice(119, this.student.profileImgUrl.length));
+            this.student.profileImgUrl = uploadedImgUrl
+              .slice(119, uploadedImgUrl.length);
+            console.log(this.student.profileImgUrl);
             this.setImg();
             this.snackbar.open('Profile Image has been updated!', undefined, {
               duration: 2000
