@@ -158,7 +158,7 @@ export class ViewStudentComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setImg() {
+  setImg() {
     if (this.student.profileImgUrl) {
       // load image by url
       this.imgPath = this.studentService.getImgPath(this.student.profileImgUrl);
